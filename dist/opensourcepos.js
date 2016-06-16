@@ -20580,9 +20580,6 @@ return jQuery;
             }
             if ($.inArray(row[params.field], params.values) !== -1) {
                 this.options.data.splice(i, 1);
-                if (this.options.sidePagination === 'server') {
-                    this.options.totalRows -= 1;
-                }
             }
         }
 
@@ -42713,7 +42710,6 @@ $.extend($.fn, {
 
 			this.validateDelegate( ":submit", "click", function( event ) {
 				if ( validator.settings.submitHandler ) {
-
 					validator.submitButton = event.target;
 				}
 				// allow suppressing validation by adding a cancel class to the submit button
@@ -44434,7 +44430,7 @@ jQuery.base64 = ( function( $ ) {
 				hasAnimation = false,
 				settings = this.settings;
 
-				$('[data-notify-position="' + this.settings.placement.from + '-' + this.settings.placement.align + '"]:not([data-closing="true"])').each(function() {
+			$('[data-notify-position="' + this.settings.placement.from + '-' + this.settings.placement.align + '"]:not([data-closing="true"])').each(function() {
 				return offsetAmt = Math.max(offsetAmt, parseInt($(this).css(settings.placement.from)) +  parseInt($(this).outerHeight()) +  parseInt(settings.spacing));
 			});
 			if (this.settings.newest_on_top == true) {
@@ -44544,7 +44540,6 @@ jQuery.base64 = ( function( $ ) {
 					}
 				}
 			}, 600);
-
 		},
 		reposition: function(posX) {
 			var self = this,
@@ -45198,9 +45193,10 @@ THE SOFTWARE.*/
 						$(this).find("td").animate({backgroundColor: "green"}, 1200, "linear")
 							.end().animate({opacity: 0}, 1200, "linear", function () {
 								table().remove({
-									field: options.uniqueId,
+									field: 'id',
 									values: selected_ids()
 								});
+								$(this).remove();
 								if (index == $(selector).length - 1) {
 									refresh();
 									enable_actions();
