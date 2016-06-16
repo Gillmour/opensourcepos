@@ -1,13 +1,10 @@
 Introdução
 ------------
-Open Source Point of Sale é um sistema para ponto de vendas baseado na Web do sistema de venda escrito na linguagem PHP.
+Open Source Point of Sale é um sistema para ponto de vendas baseado na Web do sistema de venda escrito na linguagem PHP: [original do site](https://github.com/daN4cat/opensourcepos).
+
 Ele usa MySQL como o back-end de armazenamento de dados e tem uma interface de usuário simples.
 
-Esta é a última versão 3.0.0 e ele é baseado no Bootstrap 3 usando Bootswatch tema categoricamente como padrão, e CodeIgniter 3.0.6.
-
-Badges
-------
-[![Build Status](https://travis-ci.org/jekkos/opensourcepos.svg?branch=master)](https://travis-ci.org/jekkos/opensourcepos)
+Esta é a última versão 3.0.0 e ele é baseado no (Bootswatch) UI, usando Bootswatch tema categoricamente como padrão, e CodeIgniter 3.0.6.
 
 Manter a máquina Rodando
 ------------------------
@@ -23,7 +20,7 @@ relatar bugs
 --------------
 Desde OSPOS 3.0.0 é uma versão em desenvolvimento, por favor, certifique-se sempre executar o script de atualização de banco de dados 2.4_to_3.0.sql mais recente.
 Por favor, NÃO postar questões se você não tiver feito isso antes de executar OSPOS 3.0.
-Certifique-se também de ter actualizado todos os arquivos do mais recente mestre.
+Certifique-se também de ter atualizado todos os arquivos do mais recente mestre.
 
 relatórios de bugs deve seguir este esquema:
 
@@ -31,8 +28,8 @@ relatórios de bugs deve seguir este esquema:
 2. Nome Web Server e versão (por exemplo Apache 2.4)
 3. nome de banco de dados e versão (por exemplo, MySQL 5.6)
 3. versão do PHP (por exemplo PHP 5.5)
-4. idioma selecionado no OSPOS (por exemplo, Inglês, Espanhol)
-5. Qualquer configuração de OSPOS que você mudou
+4. idioma selecionado no OSPOS (por exemplo, Inglês, Espanhol, Português)
+5. qualquer configuração de OSPOS que você mudou
 6. etapas exatas para reproduzir o (caso de teste) problema
 
 Se a informação acima não é fornecido na íntegra, o problema será marcado como pendente.
@@ -43,9 +40,10 @@ Instalação
 1. Crie / localizar um novo banco de dados mysql para instalar ponto de código aberto de venda em
 2. Execute o banco de dados de arquivo / database.sql para criar as tabelas necessárias
 3. Descompacte e faça o upload Abrir ponto de origem de arquivos de venda ao servidor web
-4. Aplicação copiar / config / database.php.tmpl para application / config / database.php
-5. Modificar application / config / database.php para se conectar ao seu banco de dados
-chave de criptografia / config / config.php 6. aplicação Modificar com seu próprio
+4. Aplicação copiar /config/database.php.tmpl para application/config/database.php
+5. Modificar application/config/database.php para se conectar ao seu banco de dados
+chave de criptografia /config/config.php 
+6. aplicação Modificar com seu próprio
 7. Vá para o seu ponto de venda instalar através do browser
 8. entre usando
 nome de usuário: admin
