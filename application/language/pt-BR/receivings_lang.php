@@ -33,7 +33,11 @@ $lang["recvs_print_after_sale"] = "Imprimir ao concluir";
 $lang["recvs_quantity"] = "Qtde.";
 $lang["recvs_receipt"] = "Recebimentos";
 $lang["recvs_receipt_number"] = "Recebimento nº";
+<<<<<<< HEAD
 $lang["recvs_receiving"] = "Troca";
+=======
+$lang["recvs_receiving"] = "Receber";
+>>>>>>> 6fd8c6380015523ff6aa7d691a310d985333b688
 $lang["recvs_register"] = "Itens Recebimento";
 $lang["recvs_requisition"] = "Requisição";
 $lang["recvs_return"] = "Devolução";
@@ -43,7 +47,11 @@ $lang["recvs_stock_destination"] = "Destinação do estoque";
 $lang["recvs_stock_locaiton"] = "Localização do estoque";
 $lang["recvs_stock_source"] = "Fonte do estoque";
 $lang["recvs_successfully_deleted"] = "Você excluiu com sucesso";
+<<<<<<< HEAD
 $lang["recvs_successfully_updated"] = "Recebimento Atualizado com sucesso";
+=======
+$lang["recvs_successfully_updated"] = "Recebimento atualizado com sucesso";
+>>>>>>> 6fd8c6380015523ff6aa7d691a310d985333b688
 $lang["recvs_supplier"] = "Fornecedor";
 $lang["recvs_total"] = "Total";
 $lang["recvs_unable_to_add_item"] = "Não é possível adicionar item para recebimento";

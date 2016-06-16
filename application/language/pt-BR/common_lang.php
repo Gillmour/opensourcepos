@@ -27,14 +27,22 @@ $lang["common_last_name_required"] = "O sobrenome é requerido";
 $lang["common_last_page"] = "Última";
 $lang["common_learn_about_project"] = "para saber mais do projeto";
 $lang["common_list_of"] = "Lista de";
+<<<<<<< HEAD
 $lang["common_logout"] = "Sair";
+=======
+$lang["common_logout"] = "&nbsp;&nbsp;<div class='glyphicon glyphicon-off'>&nbsp;Sair</div>";
+>>>>>>> 6fd8c6380015523ff6aa7d691a310d985333b688
 $lang["common_new"] = "Novo";
 $lang["common_no_persons_to_display"] = "Não existem pessoas para mostrar";
 $lang["common_or"] = "ou";
 $lang["common_phone_number"] = "Telefone";
 $lang["common_phone_number_required"] = "Número do telefone é requerido";
 $lang["common_please_visit_my"] = "Por favor visite o site da internet";
+<<<<<<< HEAD
 $lang["common_powered_by"] = "Desenvolvido por";
+=======
+$lang["common_powered_by"] = "Adaptado por";
+>>>>>>> 6fd8c6380015523ff6aa7d691a310d985333b688
 $lang["common_price"] = "Preço";
 $lang["common_remove"] = "Remover";
 $lang["common_return_policy"] = "Política";
@@ -47,7 +55,11 @@ $lang["common_view_recent_sales"] = "Ver Vendas Recentes";
 $lang["common_website"] = "site da internet";
 $lang["common_welcome"] = "Bem-vindo";
 $lang["common_welcome_message"] = "Bem-vindo";
+<<<<<<< HEAD
 $lang["common_you_are_using_ospos"] = "Você está usando Open Source Point Of Sale Versão";
+=======
+$lang["common_you_are_using_ospos"] = "Você está usando XYKO Vendas Versão";
+>>>>>>> 6fd8c6380015523ff6aa7d691a310d985333b688
 $lang["common_zip"] = "CEP";
 $lang["common_import"] = "Importar";
 $lang["common_download_import_template"] = "Baixar Modelo de importação Excel(CSV)";
