@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 Introdução
 ------------
 
@@ -37,12 +37,11 @@ relatórios de bugs deve seguir este esquema:
 1. Nome do sistema operacional e versão em execução seu servidor Web (por exemplo Linux Ubuntu 15.0)
 2. Nome Web Server e versão (por exemplo Apache 2.4)
 3. nome de banco de dados e versão (por exemplo, MySQL 5.6)
-3. versão do PHP (por exemplo PHP 5.5)
-4. idioma selecionado no OSPOS (por exemplo, Inglês, Espanhol, Português)
-5. qualquer configuração de OSPOS que você mudou
-4. idioma selecionado no OSPOS (por exemplo, Inglês, Espanhol)
-5. Qualquer configuração de OSPOS que você mudou
-6. etapas exatas para reproduzir o (caso de teste) problema
+4. versão do PHP (por exemplo PHP 5.5)
+5. idioma selecionado no OSPOS (por exemplo, Inglês, Espanhol, Português)
+6. qualquer configuração de OSPOS que você mudou
+7. etapas exatas para reproduzir o (caso de teste) problema
+
 
 Se a informação acima não é fornecido na íntegra, o problema será marcado como pendente.
 Se as informações não forem fornecidas dentro de uma semana vamos fechar o seu problema.
