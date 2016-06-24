@@ -8,13 +8,8 @@ $lang["module_employees"] = "Funcionários";
 $lang["module_employees_desc"] = "Adicionar , atualizar,  excluir e Pesquisar funcionários";
 $lang["module_giftcards"] = "Cartões Presente";
 $lang["module_giftcards_desc"] = "Adicionar,  atualizar, excluir e Pesquisar cartões presente";
-<<<<<<< HEAD
-$lang["module_home"] = "Home";
-$lang["module_item_kits"] = "Conjunto de itens";
-=======
 $lang["module_home"] = "Início";
 $lang["module_item_kits"] = "Conjuntos";
->>>>>>> 6fd8c6380015523ff6aa7d691a310d985333b688
 $lang["module_item_kits_desc"] = "Adicionar , atualizar, excluir e Pesquisar conjunto de itens";
 $lang["module_items"] = "Itens";
 $lang["module_items_desc"] = "Adicionar,  atualizar,  excluir e Pesquisar itens";

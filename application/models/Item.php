@@ -4,10 +4,14 @@ class Item extends CI_Model
 	/*
 	Determines if a given item_id is an item
 	*/
-	public function exists($item_id)
+	public function exists($item_id, $ignore_deleted = FALSE, $deleted = FALSE)
 	{
 		$this->db->from('items');
 		$this->db->where('item_id', $item_id);
+		if($ignore_deleted == FALSE)
+		{
+			$this->db->where('deleted', $deleted);
+		}
 
 		return ($this->db->get()->num_rows() == 1);
 	}
@@ -61,11 +65,9 @@ class Item extends CI_Model
 			$this->db->where('location_id', $filters['stock_location_id']);
 		}
 
-		if(empty($search))
-		{
-			$this->db->where('DATE_FORMAT(trans_date, "%Y-%m-%d") BETWEEN ' . $this->db->escape($filters['start_date']) . ' AND ' . $this->db->escape($filters['end_date']));
-		}
-		else
+		$this->db->where('DATE_FORMAT(trans_date, "%Y-%m-%d") BETWEEN ' . $this->db->escape($filters['start_date']) . ' AND ' . $this->db->escape($filters['end_date']));
+
+		if(!empty($search))
 		{
 			if($filters['search_custom'] == FALSE)
 			{
@@ -225,7 +227,7 @@ class Item extends CI_Model
 	*/
 	public function save(&$item_data, $item_id = FALSE)
 	{
-		if(!$item_id || !$this->exists($item_id))
+		if(!$item_id || !$this->exists($item_id, TRUE))
 		{
 			if($this->db->insert('items', $item_data))
 			{

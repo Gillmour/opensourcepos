@@ -10,6 +10,7 @@ class Sales extends Secure_Controller
 
 		$this->load->library('sale_lib');
 		$this->load->library('barcode_lib');
+		$this->load->library('email_lib');
 	}
 
 	public function index()
@@ -53,7 +54,7 @@ class Sales extends Secure_Controller
 
 		echo json_encode($data_row);
 	}
-	
+
 	public function search()
 	{
 		$this->Sale->create_sales_items_temp_table();
@@ -67,12 +68,12 @@ class Sales extends Secure_Controller
 		$is_valid_receipt = isset($search) ? $this->sale_lib->is_valid_receipt($search) : FALSE;
 
 		$filters = array('sale_type' => 'all',
-			'location_id' => 'all',
-			'start_date' => $this->input->get('start_date'),
-			'end_date' => $this->input->get('end_date'),
-			'only_cash' => FALSE,
-			'only_invoices' => $this->config->item('invoice_enable') && $this->input->get('only_invoices'),
-			'is_valid_receipt' => $is_valid_receipt);
+						'location_id' => 'all',
+						'start_date' => $this->input->get('start_date'),
+						'end_date' => $this->input->get('end_date'),
+						'only_cash' => FALSE,
+						'only_invoices' => $this->config->item('invoice_enable') && $this->input->get('only_invoices'),
+						'is_valid_receipt' => $is_valid_receipt);
 
 		// check if any filter is set in the multiselect dropdown
 		$filledup = array_fill_keys($this->input->get('filters'), TRUE);
@@ -91,11 +92,10 @@ class Sales extends Secure_Controller
 
 		if($total_rows > 0)
 		{
-			$total_rows++;
 			$data_rows[] = $this->xss_clean(get_sale_data_last_row($sales, $this));
 		}
 
-		echo json_encode(array('total' => $total_rows, 'rows' => $data_rows,'payment_summary' => $payment_summary));
+		echo json_encode(array('total' => $total_rows, 'rows' => $data_rows, 'payment_summary' => $payment_summary));
 	}
 
 	public function item_search()
@@ -246,7 +246,7 @@ class Sales extends Secure_Controller
 
 		$mode = $this->sale_lib->get_mode();
 		$item_id_or_number_or_item_kit_or_receipt = $this->input->post('item');
-		$quantity = ($mode == "return") ? -1 : 1;
+		$quantity = ($mode == 'return') ? -1 : 1;
 		$item_location = $this->sale_lib->get_sale_location();
 
 		$discount = 0;
@@ -283,7 +283,7 @@ class Sales extends Secure_Controller
 		$this->_reload($data);
 	}
 
-	public function edit_item($line)
+	public function edit_item($item_id)
 	{
 		$data = array();
 
@@ -300,14 +300,14 @@ class Sales extends Secure_Controller
 
 		if($this->form_validation->run() != FALSE)
 		{
-			$this->sale_lib->edit_item($line, $description, $serialnumber, $quantity, $discount, $price);
+			$this->sale_lib->edit_item($item_id, $description, $serialnumber, $quantity, $discount, $price);
 		}
 		else
 		{
 			$data['error'] = $this->lang->line('sales_error_editing_item');
 		}
 
-		$data['warning'] = $this->sale_lib->out_of_stock($this->sale_lib->get_item_id($line), $item_location);
+		$data['warning'] = $this->sale_lib->out_of_stock($this->sale_lib->get_item_id($item_id), $item_location);
 
 		$this->_reload($data);
 	}
@@ -351,9 +351,9 @@ class Sales extends Secure_Controller
 		$employee_info = $this->Employee->get_info($employee_id);
 		$data['employee'] = $employee_info->first_name  . ' ' . $employee_info->last_name;
 		$data['company_info'] = implode("\n", array(
-				$this->config->item('address'),
-				$this->config->item('phone'),
-				$this->config->item('account_number')
+			$this->config->item('address'),
+			$this->config->item('phone'),
+			$this->config->item('account_number')
 		));
 		$customer_id = $this->sale_lib->get_customer();
 		$customer_info = $this->_load_customer_data($customer_id, $data);
@@ -400,46 +400,38 @@ class Sales extends Secure_Controller
 		}
 	}
 
-	public function invoice_email($sale_id)
-	{
-		$sale_data = $this->_load_sale_data($sale_id);
-
-		$this->load->view('sales/invoice_email', $sale_data);
-		$this->sale_lib->clear_all();
-	}
-
 	public function send_invoice($sale_id)
 	{
 		$sale_data = $this->_load_sale_data($sale_id);
 
 		$result = FALSE;
 		$message = $this->lang->line('sales_invoice_no_email');
-		if(isset($sale_data["customer_email"]) && !empty($sale_data["customer_email"]))
+
+		if(!empty($sale_data['customer_email']))
 		{
-			$this->load->library('email');
-			$this->email->from($this->config->item('email'), $this->config->item('company'));
-			$this->email->to($sale_data['customer_email']);
-			$this->email->subject($this->lang->line('sales_invoice') . ' ' . $sale_data['invoice_number']);
+			$to = $sale_data['customer_email'];
+			$subject = $this->lang->line('sales_invoice') . ' ' . $sale_data['invoice_number'];
+
 			$text = $this->config->item('invoice_email_message');
 			$text = str_replace('$INV', $sale_data['invoice_number'], $text);
 			$text = str_replace('$CO', 'POS ' . $sale_data['sale_id'], $text);
-			$text = $this->_substitute_customer($text,(object) $sale_data);
-			$this->email->message($text);
+			$text = $this->_substitute_customer($text, (object) $sale_data);
 
 			// generate email attachment: invoice in pdf format
 			$html = $this->load->view('sales/invoice_email', $sale_data, TRUE);
 			// load pdf helper
 			$this->load->helper(array('dompdf', 'file'));
 			$file_content = pdf_create($html, '', FALSE);
-			$filename = sys_get_temp_dir() . '/'. $this->lang->line('sales_invoice') . '-' . str_replace('/', '-' , $sale_data["invoice_number"]) . '.pdf';
+			$filename = sys_get_temp_dir() . '/' . $this->lang->line('sales_invoice') . '-' . str_replace('/', '-' , $sale_data['invoice_number']) . '.pdf';
 			write_file($filename, $file_content);
+			
+			$result = $this->email_lib->sendEmail($to, $subject, $text, $filename);
 
-			$this->email->attach($filename);
-			$result = $this->email->send();
-			$message = $this->lang->line($result ? 'sales_invoice_sent' : 'sales_invoice_unsent') . ' ' . $sale_data["customer_email"];
+			$message = $this->lang->line($result ? 'sales_invoice_sent' : 'sales_invoice_unsent') . ' ' . $to;
 		}
 
 		echo json_encode(array('success' => $result, 'message' => $message, 'id' => $sale_id));
+
 		$this->sale_lib->clear_all();
 
 		return $result;
@@ -451,22 +443,23 @@ class Sales extends Secure_Controller
 
 		$result = FALSE;
 		$message = $this->lang->line('sales_receipt_no_email');
-		if(isset($sale_data["customer_email"]) && !empty( $sale_data["customer_email"]))
+
+		if(!empty($sale_data['customer_email']))
 		{
 			$sale_data['barcode'] = $this->barcode_lib->generate_receipt_barcode($sale_data['sale_id']);
 
-			$this->load->library('email');
-			$config['mailtype'] = 'html';
-			$this->email->initialize($config);
-			$this->email->from($this->config->item('email'), $this->config->item('company'));
-			$this->email->to($sale_data['customer_email']);
-			$this->email->subject($this->lang->line('sales_receipt'));
-			$this->email->message($this->load->view('sales/receipt_email', $sale_data, TRUE));	
-			$result = $this->email->send();
-			$message = $this->lang->line($result ? 'sales_receipt_sent' : 'sales_receipt_unsent') . ' ' . $sale_data["customer_email"];
+			$to = $sale_data['customer_email'];
+			$subject = $this->lang->line('sales_receipt');
+
+			$text = $this->load->view('sales/receipt_email', $sale_data, TRUE);
+			
+			$result = $this->email_lib->sendEmail($to, $subject, $text);
+
+			$message = $this->lang->line($result ? 'sales_receipt_sent' : 'sales_receipt_unsent') . ' ' . $to;
 		}
 
 		echo json_encode(array('success' => $result, 'message' => $message, 'id' => $sale_id));
+
 		$this->sale_lib->clear_all();
 
 		return $result;
@@ -688,6 +681,7 @@ class Sales extends Secure_Controller
 	public function edit($sale_id)
 	{
 		$data = array();
+
 		$data['employees'] = array();
 		foreach($this->Employee->get_all()->result() as $employee)
 		{
@@ -696,13 +690,13 @@ class Sales extends Secure_Controller
 				$employee->$property = $this->xss_clean($value);
 			}
 			
-			$data['employees'][$employee->person_id] = $employee->first_name . ' '. $employee->last_name;
+			$data['employees'][$employee->person_id] = $employee->first_name . ' ' . $employee->last_name;
 		}
 
 		$this->Sale->create_sales_items_temp_table();
 
 		$sale_info = $this->xss_clean($this->Sale->get_info($sale_id)->row_array());	
-		$person_name = $sale_info['first_name'] . " " . $sale_info['last_name'];
+		$person_name = $sale_info['first_name'] . ' ' . $sale_info['last_name'];
 		$data['selected_customer_name'] = !empty($sale_info['customer_id']) ? $person_name : '';
 		$data['selected_customer_id'] = $sale_info['customer_id'];
 		$data['sale_info'] = $sale_info;
@@ -731,8 +725,8 @@ class Sales extends Secure_Controller
 
 		if($this->Sale->delete_list($sale_ids, $employee_id, $update_inventory))
 		{
-			echo json_encode(array('success' => TRUE, 'message' => $this->lang->line('sales_successfully_deleted').' '.
-							count($sale_ids).' '.$this->lang->line('sales_one_or_multiple'), 'ids' => $sale_ids));
+			echo json_encode(array('success' => TRUE, 'message' => $this->lang->line('sales_successfully_deleted') . ' ' .
+							count($sale_ids) . ' ' . $this->lang->line('sales_one_or_multiple'), 'ids' => $sale_ids));
 		}
 		else
 		{
@@ -744,10 +738,10 @@ class Sales extends Secure_Controller
 	{
 		$newdate = $this->input->post('date');
 		
-		$start_date_formatter = date_create_from_format($this->config->item('dateformat') . ' ' . $this->config->item('timeformat'), $newdate);
+		$date_formatter = date_create_from_format($this->config->item('dateformat') . ' ' . $this->config->item('timeformat'), $newdate);
 
 		$sale_data = array(
-			'sale_time' => $start_date_formatter->format('Y-m-d H:i:s'),
+			'sale_time' => $date_formatter->format('Y-m-d H:i:s'),
 			'customer_id' => $this->input->post('customer_id') != '' ? $this->input->post('customer_id') : NULL,
 			'employee_id' => $this->input->post('employee_id'),
 			'comment' => $this->input->post('comment'),

@@ -31,32 +31,30 @@ class Sale extends CI_Model
 	public function search($search, $filters, $rows = 0, $limit_from = 0, $sort = 'sale_date', $order = 'desc')
 	{
 		$this->db->select('sale_id, sale_date, sale_time, SUM(quantity_purchased) AS items_purchased,
-						CONCAT(customer.first_name, " ", customer.last_name) AS customer_name, 
+						CONCAT(person.first_name, " ", person.last_name) AS customer_name, customer.company_name,
 						SUM(subtotal) AS subtotal, SUM(total) AS total, SUM(tax) AS tax, SUM(cost) AS cost, SUM(profit) AS profit,
 						sale_payment_amount AS amount_tendered, SUM(total) AS amount_due, (sale_payment_amount - SUM(total)) AS change_due, 
 						payment_type, invoice_number');
 		$this->db->from('sales_items_temp');
-		$this->db->join('people AS customer', 'sales_items_temp.customer_id = customer.person_id', 'left');
+		$this->db->join('people AS person', 'sales_items_temp.customer_id = person.person_id', 'left');
+		$this->db->join('customers AS customer', 'sales_items_temp.customer_id = customer.person_id', 'left');
 
-		if(empty($search))
-		{
-			$this->db->where('DATE(sale_time) BETWEEN ' . $this->db->escape($filters['start_date']) . ' AND ' . $this->db->escape($filters['end_date']));
-		}
-		else
+		$this->db->where('DATE(sale_time) BETWEEN ' . $this->db->escape($filters['start_date']) . ' AND ' . $this->db->escape($filters['end_date']));
+
+		if(!empty($search))
 		{
 			if($filters['is_valid_receipt'] != FALSE)
 			{
 				$pieces = explode(' ', $search);
 				$this->db->where('sales_items_temp.sale_id', $pieces[1]);
 			}
-
 			else
 			{
 				$this->db->group_start();
-					$this->db->like('last_name', $search);
-					$this->db->or_like('first_name', $search);
-					$this->db->or_like('CONCAT(customer.first_name, " ", last_name)', $search);
-					$this->db->or_like('company_name', $search);
+					$this->db->like('person.last_name', $search);
+					$this->db->or_like('person.first_name', $search);
+					$this->db->or_like('CONCAT(person.first_name, " ", person.last_name)', $search);
+					$this->db->or_like('customer.company_name', $search);
 				$this->db->group_end();
 			}
 		}
@@ -107,11 +105,9 @@ class Sale extends CI_Model
 		$this->db->join('sales_payments', 'sales_payments.sale_id = sales.sale_id');
 		$this->db->join('people', 'people.person_id = sales.customer_id', 'left');
 
-		if(empty($search))
-		{
-			$this->db->where('DATE(sale_time) BETWEEN ' . $this->db->escape($filters['start_date']) . ' AND ' . $this->db->escape($filters['end_date']));
-		}
-		else
+		$this->db->where('DATE(sale_time) BETWEEN ' . $this->db->escape($filters['start_date']) . ' AND ' . $this->db->escape($filters['end_date']));
+
+		if(!empty($search))
 		{
 			if($filters['is_valid_receipt'] != FALSE)
 			{

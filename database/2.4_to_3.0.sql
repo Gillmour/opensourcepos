@@ -9,6 +9,11 @@ ALTER TABLE `ospos_item_kit_items`
 
 ALTER TABLE `ospos_item_quantities`
  MODIFY COLUMN `quantity` decimal(15,3) NOT NULL DEFAULT '0';
+ 
+ALTER TABLE `ospos_receivings`
+ DROP KEY `invoice_number`,
+ CHANGE COLUMN `invoice_number` `reference` varchar(32) DEFAULT NULL,
+ ADD KEY `reference` (`reference`);
 
 ALTER TABLE `ospos_receivings_items`
  MODIFY COLUMN `quantity_purchased` decimal(15,3) NOT NULL DEFAULT '0',
@@ -41,7 +46,12 @@ INSERT INTO `ospos_app_config` (`key`, `value`) VALUES
  ('country_codes', 'us'),
  ('notify_horizontal_position', 'right'),
  ('notify_vertical_position', 'top'),
- ('payment_options_order', 'cashdebitcredit');
+ ('payment_options_order', 'cashdebitcredit'),
+ ('protocol', 'mail'),
+ ('mailpath', '/usr/sbin/sendmail'),
+ ('smtp_port', '465'),
+ ('smtp_timeout', '5'),
+ ('smtp_crypto', 'ssl');
  
 DELETE FROM `ospos_app_config` WHERE `key` = 'use_invoice_template';
 

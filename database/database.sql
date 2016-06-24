@@ -71,7 +71,12 @@ INSERT INTO `ospos_app_config` (`key`, `value`) VALUES
 ('msg_pwd', ''),
 ('notify_horizontal_position', 'right'),
 ('notify_vertical_position', 'top'),
-('payment_options_order', 'cashdebitcredit');
+('payment_options_order', 'cashdebitcredit'),
+('protocol', 'mail'),
+('mailpath', '/usr/sbin/sendmail'),
+('smtp_port', '465'),
+('smtp_timeout', '5'),
+('smtp_crypto', 'ssl');
 
 
 -- --------------------------------------------------------
@@ -441,11 +446,11 @@ CREATE TABLE `ospos_receivings` (
   `comment` text NOT NULL,
   `receiving_id` int(10) NOT NULL AUTO_INCREMENT,
   `payment_type` varchar(20) DEFAULT NULL,
-  `invoice_number` varchar(32) DEFAULT NULL,
+  `reference` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`receiving_id`),
   KEY `supplier_id` (`supplier_id`),
   KEY `employee_id` (`employee_id`),
-  UNIQUE KEY `invoice_number` (`invoice_number`)
+  KEY `reference` (`reference`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8  ;
 
 --

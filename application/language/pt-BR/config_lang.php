@@ -70,6 +70,15 @@ $lang["config_default_tax_rate_2"] = "Imposto 2 Tarifa";
 $lang["config_default_tax_rate_number"] = "A taxa de Imposto padrão deve ser um número";
 $lang["config_default_tax_rate_required"] = "A taxa de Imposto padrão é um campo obrigatório";
 $lang["config_default_tax_name_required"] = "Nome da taxa padrão é requerida";
+$lang["config_email"] = "email";
+$lang["config_email_protocol"] = "Protocolo";
+$lang["config_email_mailpath"] = "Caminho para Sendmail";
+$lang["config_email_smtp_host"] = "Servidor SMTP";
+$lang["config_email_smtp_port"] = "Porta SMTP";
+$lang["config_email_smtp_crypto"] = "Criptografia SMTP";
+$lang["config_email_smtp_timeout"] = "SMTP Timeout (s)";
+$lang["config_email_smtp_user"] = "Nome de usuário SMTP";
+$lang["config_email_smtp_pass"] = "Senha SMTP ";
 $lang["config_fax"] = "Fax";
 $lang["config_general"] = "Gerais";
 $lang["config_general_configuration"] = "Configurações Gerais";
@@ -104,11 +113,7 @@ $lang["config_msg_pwd_required"] = "SMS-API Senha é um campo obrigatório";
 $lang["config_msg_src"] = "SMS-API Remetente ID";
 $lang["config_msg_src_required"] = "SMS-API Remetente ID é um campo obrigatório ";
 $lang["config_number_format"] = "Formato do número";
-<<<<<<< HEAD
-$lang["config_payment_options_order"] = "Payment Options Order";
-=======
 $lang["config_payment_options_order"] = "Opções da ordem de pagamento";
->>>>>>> 6fd8c6380015523ff6aa7d691a310d985333b688
 $lang["config_phone"] = "Telefone";
 $lang["config_phone_required"] = "Telefone da Empresa é requerido";
 $lang["config_print_bottom_margin"] = "Margem inferior";
@@ -152,12 +157,6 @@ $lang["config_thousands_separator"] = "Separador de milhar";
 $lang["config_timezone"] = "Fuso horário";
 $lang["config_website"] = "Site da internet";
 $lang["config_datetimeformat"] = "Formato da data e hora";
-<<<<<<< HEAD
-$lang["config_country_codes"] = "Country Codes";
-$lang["config_country_codes_tooltip"] = "Comma separated list of country codes for nominatim address lookup.";
-$lang["config_notify_alignment"] = "Notification Popup Position";
-=======
 $lang["config_country_codes"] = "Código do país";
 $lang["config_country_codes_tooltip"] = "Vírgula lista de códigos de país separado para pesquisa de endereços nominatim.";
-$lang["config_notify_alignment"] = "Notificação Posição Popup";
->>>>>>> 6fd8c6380015523ff6aa7d691a310d985333b688
+$lang["config_notify_alignment"] = "Notificação Posição Popup ";
