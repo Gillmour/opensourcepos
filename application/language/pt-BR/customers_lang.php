@@ -22,6 +22,3 @@ $lang["customers_excel_import_failed"] = "Importação do Excel falhou";
 $lang["customers_excel_import_nodata_wrongformat"] = "Seu arquivo enviado não contém dados ou formato errado";
 $lang["customers_excel_import_success"] = "Importação de clientes com sucesso";
 $lang["customers_excel_import_partially_failed"] = "A maioria dos clientes importado. Mas alguns não eram, aqui está a lista";
-$lang[""] = " ";
-$lang[""] = " ";
-$lang[""] = " ";

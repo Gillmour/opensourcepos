@@ -1,4 +1,4 @@
-﻿<?php 
+<?php 
 
 $lang["common_address_1"] = "Endereço";
 $lang["common_address_2"] = "Complemento";
@@ -30,6 +30,7 @@ $lang["common_list_of"] = "Lista de";
 $lang["common_logout"] = "Sair";
 $lang["common_new"] = "Novo";
 $lang["common_no_persons_to_display"] = "Não existem pessoas para mostrar";
+$lang["common_none_selected_text"] = "Nada Selecionado";
 $lang["common_or"] = "ou";
 $lang["common_phone_number"] = "Telefone";
 $lang["common_phone_number_required"] = "Número do telefone é requerido";
@@ -50,7 +51,7 @@ $lang["common_welcome_message"] = "Bem-vindo";
 $lang["common_you_are_using_ospos"] = "Você está usando Open Source Point Of Sale Versão";
 $lang["common_zip"] = "CEP";
 $lang["common_import"] = "Importar";
-$lang["common_download_import_template"] = "Baixar Modelo de importação Excel (CSV)";
+$lang["common_download_import_template"] = "Baixar Modelo de importação Excel(CSV)";
 $lang["common_import_excel"] = "Importar do Excel";
 $lang["common_import_full_path"] = "Caminho completo para o arquivo do Excel é necessário";
 $lang["common_import_select_file"] = "Selecionar o arquivo";
