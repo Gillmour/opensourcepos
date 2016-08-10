@@ -89,7 +89,7 @@ Get the sales payments summary
 function get_sales_manage_payments_summary($payments, $sales, $controller)
 {
 	$CI =& get_instance();
-	$table='<div id="report_summary">';
+	$table = '<div id="report_summary">';
 
 	foreach($payments as $key=>$payment)
 	{
@@ -104,9 +104,9 @@ function get_sales_manage_payments_summary($payments, $sales, $controller)
 				$amount -= $sale['change_due'];
 			}
 		}
-		$table.='<div class="summary_row">'.$payment['payment_type'].': '.to_currency( $amount ) . '</div>';
+		$table .= '<div class="summary_row">' . $payment['payment_type'] . ': ' . to_currency( $amount ) . '</div>';
 	}
-	$table.='</div>';
+	$table .= '</div>';
 
 	return $table;
 }
@@ -217,9 +217,9 @@ function get_supplier_data_row($supplier, $controller)
 		'email' => empty($supplier->email) ? '' : mailto($supplier->email, $supplier->email),
 		'phone_number' => $supplier->phone_number,
 		'messages' => empty($supplier->phone_number) ? '' : anchor("Messages/view/$supplier->person_id", '<span class="glyphicon glyphicon-phone"></span>', 
-			array('class'=>'modal-dlg', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title' => $CI->lang->line('messages_sms_send'))),
+			array('class'=>"modal-dlg", 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line('messages_sms_send'))),
 		'edit' => anchor($controller_name."/view/$supplier->person_id", '<span class="glyphicon glyphicon-edit"></span>',
-			array('class'=>'modal-dlg', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title' => $CI->lang->line($controller_name.'_update')))
+			array('class'=>"modal-dlg", 'data-btn-submit' => $CI->lang->line('common_submit'), 'title'=>$CI->lang->line($controller_name.'_update')))
 		);
 }
 
@@ -283,7 +283,7 @@ function get_item_data_row($item, $controller)
 			array('class' => 'modal-dlg', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title' => $CI->lang->line($controller_name.'_count'))
 		),
 		'stock' => anchor($controller_name."/count_details/$item->item_id", '<span class="glyphicon glyphicon-list-alt"></span>',
-		array('class' => 'modal-dlg', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title' => $CI->lang->line($controller_name.'_details_count'))
+			array('class' => 'modal-dlg', 'title' => $CI->lang->line($controller_name.'_details_count'))
 		),
 		'edit' => anchor($controller_name."/view/$item->item_id", '<span class="glyphicon glyphicon-edit"></span>',
 			array('class' => 'modal-dlg', 'data-btn-submit' => $CI->lang->line('common_submit'), 'title' => $CI->lang->line($controller_name.'_update'))

@@ -50,7 +50,7 @@ class Receivings extends Secure_Controller
 			$mode = $this->input->post('mode');
 			$this->receiving_lib->set_mode($mode);
 		}
-		else if($this->Stock_location->is_allowed_location($stock_source, 'receivings'))
+		elseif($this->Stock_location->is_allowed_location($stock_source, 'receivings'))
 		{
 			$this->receiving_lib->set_stock_source($stock_source);
 			$this->receiving_lib->set_stock_destination($stock_destination);
@@ -87,11 +87,11 @@ class Receivings extends Secure_Controller
 		{
 			$this->receiving_lib->return_entire_receiving($item_id_or_number_or_item_kit_or_receipt);
 		}
-		else if($this->receiving_lib->is_valid_item_kit($item_id_or_number_or_item_kit_or_receipt))
+		elseif($this->receiving_lib->is_valid_item_kit($item_id_or_number_or_item_kit_or_receipt))
 		{
 			$this->receiving_lib->add_item_kit($item_id_or_number_or_item_kit_or_receipt, $item_location);
 		}
-		else if(!$this->receiving_lib->add_item($item_id_or_number_or_item_kit_or_receipt, $quantity, $item_location))
+		elseif(!$this->receiving_lib->add_item($item_id_or_number_or_item_kit_or_receipt, $quantity, $item_location))
 		{
 			$data['error'] = $this->lang->line('receivings_unable_to_add_item');
 		}
@@ -103,15 +103,15 @@ class Receivings extends Secure_Controller
 	{
 		$data = array();
 
-		$this->form_validation->set_rules('price', 'lang:items_price', 'required|numeric');
-		$this->form_validation->set_rules('quantity', 'lang:items_quantity', 'required|numeric');
-		$this->form_validation->set_rules('discount', 'lang:items_discount', 'required|numeric');
+		$this->form_validation->set_rules('price', 'lang:items_price', 'required|callback_numeric');
+		$this->form_validation->set_rules('quantity', 'lang:items_quantity', 'required|callback_numeric');
+		$this->form_validation->set_rules('discount', 'lang:items_discount', 'required|callback_numeric');
 
 		$description = $this->input->post('description');
 		$serialnumber = $this->input->post('serialnumber');
-		$price = $this->input->post('price');
-		$quantity = $this->input->post('quantity');
-		$discount = $this->input->post('discount');
+		$price = parse_decimals($this->input->post('price'));
+		$quantity = parse_decimals($this->input->post('quantity'));
+		$discount = parse_decimals($this->input->post('discount'));
 		$item_location = $this->input->post('location');
 
 		if($this->form_validation->run() != FALSE)

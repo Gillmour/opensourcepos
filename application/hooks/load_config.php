@@ -28,7 +28,7 @@ function load_config()
         {
             if(!is_array($file) && substr(strrchr($file,'.'), 1) == "php")
             {
-                $CI->lang->load(str_replace('_lang.php', '', $file), $language);    
+                $CI->lang->load(strtr($file, '', '_lang.php'), $language);    
             }
         }
     }
@@ -42,5 +42,7 @@ function load_config()
     {
         date_default_timezone_set('America/New_York');
     }
+
+    bcscale($CI->config->item('currency_decimals') + $CI->config->item('tax_decimals'));
 }
 ?>

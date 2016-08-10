@@ -96,23 +96,23 @@
 			</div>
 
 			<div class="form-group form-group-sm">
-				<?php echo form_label($this->lang->line('config_notify_alignment'), 'config_notify_horizontal_position', array('class' => 'control-label col-xs-2')); ?>
+				<?php echo form_label($this->lang->line('config_notify_alignment'), 'notify_horizontal_position', array('class' => 'control-label col-xs-2')); ?>
 				<div class="col-sm-10">
 					<div class="form-group form-group-sm row">
 						<div class='col-sm-2'>
-							<?php echo form_dropdown('config_notify_vertical_position', array(
+							<?php echo form_dropdown('notify_vertical_position', array(
 								'top' => $this->lang->line('config_top'),
 								'bottom' => $this->lang->line('config_bottom')
 							),
-								$this->config->item('config_notify_vertical_position'), array('class' => 'form-control input-sm')); ?>
+								$this->config->item('notify_vertical_position'), array('class' => 'form-control input-sm')); ?>
 						</div>
 						<div class='col-sm-2'>
-							<?php echo form_dropdown('config_notify_horizontal_position', array(
+							<?php echo form_dropdown('notify_horizontal_position', array(
 								'left' => $this->lang->line('config_left'),
 								'center' => $this->lang->line('config_center'),
 								'right' => $this->lang->line('config_right')
 							),
-								$this->config->item('config_notify_horizontal_position'), array('class' => 'form-control input-sm')); ?>
+								$this->config->item('notify_horizontal_position'), array('class' => 'form-control input-sm')); ?>
 						</div>
 					</div>
 				</div>
@@ -246,7 +246,7 @@
 	</div>
 <?php echo form_close(); ?>
 
-<script type='text/javascript'>
+<script type="text/javascript">
 //validation and submit handling
 $(document).ready(function()
 {
@@ -264,18 +264,22 @@ $(document).ready(function()
     		default_tax_1_rate:
     		{
     			required: true,
-    			number: true
+				remote: "<?php echo site_url($controller_name . '/check_numeric')?>"
     		},
 			default_tax_1_name: "required",
+			default_tax2_rate:
+			{
+				remote: "<?php echo site_url($controller_name . '/check_numeric')?>"
+			},
     		lines_per_page:
     		{
         		required: true,
-        		number: true
+				remote: "<?php echo site_url($controller_name . '/check_numeric')?>"
     		},
     		default_sales_discount: 
         	{
         		required: true,
-        		number: true
+				remote: "<?php echo site_url($controller_name . '/check_numeric')?>"
     		}  		
    		},
 

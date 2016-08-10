@@ -1,12 +1,13 @@
 FROM php:5-apache
 MAINTAINER jekkos
-RUN sed -i -e 's/archive.ubuntu.com\|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    php5-gd \
-    php5-apcu
+    php5-apcu \
+    libicu-dev \
+    libgd-dev
 
 RUN a2enmod rewrite
-RUN docker-php-ext-install mysql mysqli bcmath
+RUN docker-php-ext-install mysql mysqli bcmath intl gd
+RUN echo "date.timezone = \"UTC\"" > /usr/local/etc/php/conf.d/timezone.ini
 
 WORKDIR /app
 COPY . /app

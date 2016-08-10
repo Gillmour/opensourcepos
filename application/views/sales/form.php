@@ -52,18 +52,18 @@
 				</div>
 				<div class='col-xs-4'>
 					<div class="input-group input-group-sm">
-						<?php if(!$this->config->item('currency_side')): ?>
+						<?php if(!currency_side()): ?>
 							<span class="input-group-addon input-sm"><b><?php echo $this->config->item('currency_symbol'); ?></b></span>
 						<?php endif; ?>
 						<?php echo form_input(array('name'=>'payment_amount_'.$i, 'value'=>$row->payment_amount, 'id'=>'payment_amount_'.$i, 'class'=>'form-control input-sm', 'readonly'=>'true'));?>
-						<?php if ($this->config->item('currency_side')): ?>
+						<?php if (currency_side()): ?>
 							<span class="input-group-addon input-sm"><b><?php echo $this->config->item('currency_symbol'); ?></b></span>
 						<?php endif; ?>
 					</div>
 				</div>
 			</div>
 		<?php 
-		$i++;
+			++$i;
 		}
 		echo form_hidden('number_of_payments', $i);			
 		?>
@@ -93,7 +93,7 @@
 <?php echo form_close(); ?>
 		
 
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
 $(document).ready(function()
 {	
 	<?php if(!empty($sale_info['email'])): ?>
@@ -187,14 +187,14 @@ $(document).ready(function()
 				{
 					url: "<?php echo site_url($controller_name . '/check_invoice_number')?>",
 					type: "POST",
-					data:
+					data: $.extend(csrf_form_base(),
 					{
 						"sale_id" : <?php echo $sale_info['sale_id']; ?>,
 						"invoice_number" : function()
 						{
 							return $("#invoice_number").val();
 						}
-					}
+					})
 				}
 			}
 		},

@@ -14,6 +14,28 @@ $config['application_version'] = '3.0.0';
 
 /*
 |--------------------------------------------------------------------------
+| Theme
+|--------------------------------------------------------------------------
+|
+| This specifies which bootwatch theme will be used by OSPOS
+| Available are: cerulean, cosmo, cyborg, darkly, flatly, journal, paper, readable, sandstone, slate, spacelab, superhero, united, yeti
+|
+*/
+$config['theme'] = 'flatly';
+
+/*
+|--------------------------------------------------------------------------
+| Commit sha1
+|--------------------------------------------------------------------------
+|
+| This is the commit hash for the version you are currently using 
+|
+|
+*/
+$config['commit_sha1'] = '$Id: fc6bbbd0560d4e87103265ceb0450b5d7aaa930b $';
+
+/*
+|--------------------------------------------------------------------------
 | Internal to OSPOS XSS Clean
 |--------------------------------------------------------------------------
 |
@@ -46,9 +68,9 @@ $config['ospos_xss_clean'] = TRUE;
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http");
-$config['base_url'] .= "://".$_SERVER['HTTP_HOST'];
-$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
+$config['base_url'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
+$config['base_url'] .= '://' . $_SERVER['HTTP_HOST'];
+$config['base_url'] .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
 /*
 |--------------------------------------------------------------------------
@@ -415,11 +437,11 @@ $config['sess_regenerate_destroy'] = FALSE;
 |       'cookie_httponly') will also affect sessions.
 |
 */
-$config['cookie_prefix']	= '';
-$config['cookie_domain']	= '';
-$config['cookie_path']		= '/';
-$config['cookie_secure']	= FALSE;
-$config['cookie_httponly'] 	= FALSE;
+$config['cookie_prefix'] = '';
+$config['cookie_domain'] = '';
+$config['cookie_path'] = '/';
+$config['cookie_secure'] = FALSE;
+$config['cookie_httponly'] = FALSE;
 
 /*
 |--------------------------------------------------------------------------
@@ -463,7 +485,7 @@ $config['global_xss_filtering'] = FALSE;
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
-$config['csrf_protection'] = FALSE;
+$config['csrf_protection'] = TRUE;
 $config['csrf_token_name'] = 'csrf_ospos_v3';
 $config['csrf_cookie_name'] = 'csrf_cookie_ospos_v3';
 $config['csrf_expire'] = 7200;

@@ -322,10 +322,10 @@ class Items extends Secure_Controller
 			'category' => $this->input->post('category'),
 			'supplier_id' => $this->input->post('supplier_id') == '' ? NULL : $this->input->post('supplier_id'),
 			'item_number' => $this->input->post('item_number') == '' ? NULL : $this->input->post('item_number'),
-			'cost_price' => $this->input->post('cost_price'),
-			'unit_price' => $this->input->post('unit_price'),
-			'reorder_level' => $this->input->post('reorder_level'),
-			'receiving_quantity' => $this->input->post('receiving_quantity'),
+			'cost_price' => parse_decimals($this->input->post('cost_price')),
+			'unit_price' => parse_decimals($this->input->post('unit_price')),
+			'reorder_level' => parse_decimals($this->input->post('reorder_level')),
+			'receiving_quantity' => parse_decimals($this->input->post('receiving_quantity')),
 			'allow_alt_description' => $this->input->post('allow_alt_description') != NULL,
 			'is_serialized' => $this->input->post('is_serialized') != NULL,
 			'deleted' => $this->input->post('is_deleted') != NULL,
@@ -367,11 +367,13 @@ class Items extends Secure_Controller
 			$items_taxes_data = array();
 			$tax_names = $this->input->post('tax_names');
 			$tax_percents = $this->input->post('tax_percents');
-			for($k = 0; $k < count($tax_percents); $k++)
+			$count = count($tax_percents);
+			for ($k = 0; $k < $count; ++$k)
 			{
-				if(is_numeric($tax_percents[$k]))
+				$tax_percentage = parse_decimals($tax_percents[$k]);
+				if(is_numeric($tax_percentage))
 				{
-					$items_taxes_data[] = array('name' => $tax_names[$k], 'percent' => $tax_percents[$k]);
+					$items_taxes_data[] = array('name' => $tax_names[$k], 'percent' => $tax_percentage);
 				}
 			}
 			$success &= $this->Item_taxes->save($items_taxes_data, $item_id);
@@ -380,7 +382,7 @@ class Items extends Secure_Controller
             $stock_locations = $this->Stock_location->get_undeleted_all()->result_array();
             foreach($stock_locations as $location)
             {
-                $updated_quantity = $this->input->post('quantity_' . $location['location_id']);
+                $updated_quantity = parse_decimals($this->input->post('quantity_' . $location['location_id']));
                 $location_detail = array('item_id' => $item_id,
                                         'location_id' => $location['location_id'],
                                         'quantity' => $updated_quantity);  
@@ -468,7 +470,7 @@ class Items extends Secure_Controller
 			'trans_user' => $employee_id,
 			'trans_location' => $location_id,
 			'trans_comment' => $this->input->post('trans_comment'),
-			'trans_inventory' => $this->input->post('newquantity')
+			'trans_inventory' => parse_decimals($this->input->post('newquantity'))
 		);
 		
 		$this->Inventory->insert($inv_data);
@@ -478,7 +480,7 @@ class Items extends Secure_Controller
 		$item_quantity_data = array(
 			'item_id' => $item_id,
 			'location_id' => $location_id,
-			'quantity' => $item_quantity->quantity + $this->input->post('newquantity')
+			'quantity' => $item_quantity->quantity + parse_decimals($this->input->post('newquantity'))
 		);
 
 		if($this->Item_quantity->save($item_quantity_data, $item_id, $location_id))
@@ -520,8 +522,8 @@ class Items extends Secure_Controller
 			$tax_names = $this->input->post('tax_names');
 			$tax_percents = $this->input->post('tax_percents');
 			$tax_updated = FALSE;
-			
-			for($k = 0; $k < count($tax_percents); $k++)
+			$count = count($tax_percents);
+			for ($k = 0; $k < $count; ++$k)
 			{		
 				if(!empty($tax_names[$k]) && is_numeric($tax_percents[$k]))
 				{
@@ -658,7 +660,7 @@ class Items extends Secure_Controller
 
                         // array to store information if location got a quantity
                         $allowed_locations = $this->Stock_location->get_allowed_locations();
-                        for($col = 24; $col < $cols; $col = $col + 2)
+                        for ($col = 24; $col < $cols; $col = $col + 2)
                         {
                             $location_id = $data[$col];
                             if(array_key_exists($location_id, $allowed_locations))
@@ -713,7 +715,7 @@ class Items extends Secure_Controller
                         $failCodes[] = $i;
                     }
 
-					$i++;
+					++$i;
                 }
 
 				if(count($failCodes) > 0)

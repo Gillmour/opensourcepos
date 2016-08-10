@@ -85,7 +85,10 @@ if (isset($success))
 					<?php echo form_input(array('name'=>'item', 'id'=>'item', 'class'=>'form-control input-sm', 'size'=>'50', 'tabindex'=>'1')); ?>
 				</li>
 				<li class="pull-right">
-					<button id='new_item_button' class='btn btn-info btn-sm pull-right modal-dlg' data-btn-submit='<?php echo $this->lang->line('common_submit') ?>' data-href='<?php echo site_url("items/view"); ?>'
+					<button id='new_item_button' class='btn btn-info btn-sm pull-right modal-dlg'
+						data-btn-new='<?php echo $this->lang->line('common_new') ?>'
+						data-btn-submit='<?php echo $this->lang->line('common_submit') ?>'
+						data-href='<?php echo site_url("items/view"); ?>'
 						title='<?php echo $this->lang->line('sales_new_item'); ?>'>
 						<span class="glyphicon glyphicon-tag">&nbsp</span><?php echo $this->lang->line('sales_new_item'); ?>
 					</button>
@@ -400,7 +403,7 @@ if (isset($success))
 	</div>
 </div>
 
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
 $(document).ready(function()
 {
     $("#item").autocomplete(
@@ -485,7 +488,7 @@ $(document).ready(function()
 	{
 		if (event.which == 13)
 		{
-			$('#cart_' + (1 + $(this).index() / 2 )).submit();
+			$(this).parents("tr").prevAll("form:first").submit();
 		}
 	});
 

@@ -5,23 +5,43 @@
 			<ul id="locale_error_message_box" class="error_message_box"></ul>
 
 			<div class="form-group form-group-sm">
+				<?php echo form_label($this->lang->line('config_number_locale'), 'number_locale', array('class' => 'control-label col-xs-2')); ?>
+				<div class='row'>
+					<div class='col-xs-1'>
+						<?php echo form_input('number_locale', $this->config->item('number_locale'), array('class' => 'form-control input-sm', 'id' => 'number_locale')); ?>
+					</div>
+					<div class="col-xs-2">
+						<label class="control-label">
+							<a href="https://github.com/jekkos/opensourcepos/wiki/Localisation-support" target="_blank">
+								<span class="glyphicon glyphicon-info-sign" data-toggle="tootltip" data-placement="right" title="<?php echo $this->lang->line('config_number_locale_tooltip'); ?>"></span>
+							</a>
+							<span id="number_locale_example">
+								&nbsp&nbsp<?php echo to_currency(1234567890.12300); ?>
+							</span>
+						</label>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group form-group-sm">
+				<?php echo form_label($this->lang->line('config_thousands_separator'), 'thousands_separator', array('class' => 'control-label col-xs-2')); ?>
+				<div class='col-xs-2'>
+					<?php echo form_checkbox(array(
+						'name' => 'thousands_separator',
+						'id' => 'thousands_separator',
+						'value' => 'thousands_separator',
+						'checked'=>$this->config->item('thousands_separator'))); ?>
+				</div>
+			</div>
+
+			<div class="form-group form-group-sm">
 				<?php echo form_label($this->lang->line('config_currency_symbol'), 'currency_symbol', array('class' => 'control-label col-xs-2')); ?>
 				<div class='col-xs-1'>
 					<?php echo form_input(array(
-							'name' => 'currency_symbol',
-							'id' => 'currency_symbol',
-							'class' => 'form-control input-sm',
-							'value'=>$this->config->item('currency_symbol'))); ?>
-				</div>
-				<div class='checkbox col-xs-2'>
-					<label>
-						<?php echo form_checkbox(array(
-							'name' => 'currency_side',
-							'id' => 'currency_side',
-							'value' => 'currency_side',
-							'checked'=>$this->config->item('currency_side'))); ?>
-						<?php echo $this->lang->line('config_currency_side'); ?>
-					</label>
+						'name' => 'currency_symbol',
+						'id' => 'currency_symbol',
+						'class' => 'form-control input-sm number_locale',
+						'value'=>$this->config->item('currency_symbol'))); ?>
 				</div>
 			</div>
 
@@ -53,32 +73,6 @@
 			</div>
 
 			<div class="form-group form-group-sm">
-				<?php echo form_label($this->lang->line('config_decimal_point'), 'decimal_point', array('class' => 'control-label col-xs-2')); ?>
-				<div class='col-xs-2'>
-					<?php echo form_dropdown('decimal_point', array(
-						'.' => '. (' . $this->lang->line('config_dot') . ')',
-						',' => ', (' . $this->lang->line('config_comma') . ')'
-					),
-					$this->config->item('decimal_point'), array('class' => 'form-control input-sm'));
-					?>
-				</div>
-			</div>
-
-			<div class="form-group form-group-sm">
-				<?php echo form_label($this->lang->line('config_thousands_separator'), 'thousands_separator', array('class' => 'control-label col-xs-2')); ?>
-				<div class='col-xs-2'>
-					<?php echo form_dropdown('thousands_separator', array(
-						'&apos;' => '&apos; (' . $this->lang->line('config_apostrophe') . ')',
-						',' => ', (' . $this->lang->line('config_comma') . ')',
-						'.' => '. (' . $this->lang->line('config_dot') . ')',
-						'' => '(' . $this->lang->line('config_none') . ')'
-					),
-					$this->config->item('thousands_separator'), array('class' => 'form-control input-sm'));
-					?>
-				</div>
-			</div>
-
-			<div class="form-group form-group-sm">
 				<?php echo form_label($this->lang->line('config_quantity_decimals'), 'quantity_decimals', array('class' => 'control-label col-xs-2')); ?>
 				<div class='col-xs-2'>
 					<?php echo form_dropdown('quantity_decimals', array(
@@ -87,7 +81,7 @@
 						'2' => '2',
 						'3' => '3'
 					),
-					$this->config->item('quantity_decimals'), array('class' => 'form-control input-sm'));
+						$this->config->item('quantity_decimals'), array('class' => 'form-control input-sm'));
 					?>
 				</div>
 			</div>
@@ -122,6 +116,7 @@
 						'en' => 'English',
 						'es' => 'Spanish',
 						'nl-BE' => 'Dutch (Belgium)',
+						'de' => 'German (Germany)',
 						'de-CH' => 'German (Swiss)',
 						'fr' => 'French',
 						'zh' => 'Chinese',
@@ -131,7 +126,8 @@
 						'ru' => 'Russian',
 						'hu-HU' => 'Hungarian',
 						'pt-BR' => 'Portuguese (Brazil)',
-						'hr-HR' => 'Croatian (Croatia)'
+						'hr-HR' => 'Croatian (Croatia)',
+						'ar-EG' => 'Arabic (Egypt)'
 					),
 					$this->config->item('language'), array('class' => 'form-control input-sm'));
 					?>
@@ -275,12 +271,68 @@
 	</div>
 <?php echo form_close(); ?>
 
-<script type='text/javascript'>
+<script type="text/javascript">
 //validation and submit handling
 $(document).ready(function()
 {
 	$("span").tooltip();
+
+	var number_locale_params = {
+		url: "<?php echo site_url($controller_name . '/check_number_locale')?>",
+		type: "POST"
+	};
+
+	$("#currency_symbol, #thousands_separator").change(function() {
+		var field = $(this).attr('id');
+		var value = $(this).is(":checkbox") ? $(this).is(":checked") : $(this).val();
+		var data =
+		{
+			number_locale: $("#number_locale").val()
+		};
+		data[field] = value;
+		$.post($.extend(number_locale_params, {
+			data: $.extend(csrf_form_base(), data),
+			success: function(response) {
+				$("#number_locale_example").text(response.number_locale_example);
+			}
+		}));
+	});
+
 	$('#locale_config_form').validate($.extend(form_support.handler, {
+
+		rules:
+		{
+			number_locale:
+			{
+				required: true,
+				remote: $.extend(number_locale_params, {
+					data: $.extend(csrf_form_base(), {
+						"number_locale" : function() {
+							return $("#number_locale").val();
+						},
+						"thousands_separator": function() {
+							return $("#thousands_separator").is(":checked");
+						}
+					}),
+					dataFilter: function(data, dataType) {
+						setup_csrf_token();
+						var response = JSON.parse(data);
+						$("#number_locale_example").text(response.number_locale_example);
+						$("#currency_symbol").val(response.currency_symbol);
+						$("#thousands_separator").prop('checked', response.thousands_separator);
+						return response.success;
+					}
+				})
+			}
+		},
+
+		messages:
+		{
+			number_locale: {
+				required: '<?php echo $this->lang->line('config_number_locale_required') ?>',
+				number_locale: '<?php echo $this->lang->line('config_number_locale_invalid') ?>'
+			}
+		},
 		errorLabelContainer: "#locale_error_message_box"
 	}));
 });

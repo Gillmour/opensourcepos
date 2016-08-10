@@ -46,7 +46,7 @@ if (isset($success))
 				?>
 
 				<li class="pull-right">
-					<button class='btn btn-default btn-sm modal-dlg' id='show_suspended_sales_button' data-btn-submit='<?php echo $this->lang->line('common_submit'); ?>', data-href='<?php echo site_url($controller_name."/suspended"); ?>'
+					<button class='btn btn-default btn-sm modal-dlg' id='show_suspended_sales_button' data-href='<?php echo site_url($controller_name."/suspended"); ?>'
 							title='<?php echo $this->lang->line('sales_suspended_sales'); ?>'>
 						<span class="glyphicon glyphicon-align-justify">&nbsp</span><?php echo $this->lang->line('sales_suspended_sales'); ?>
 					</button>
@@ -67,6 +67,8 @@ if (isset($success))
 		</div>
 	<?php echo form_close(); ?>
 
+	<?php $tabindex = 0; ?>
+
 	<?php echo form_open($controller_name."/add", array('id'=>'add_item_form', 'class'=>'form-horizontal panel panel-default')); ?>
 		<div class="panel-body form-group">
 			<ul>
@@ -74,11 +76,11 @@ if (isset($success))
 					<label for="item" class='control-label'><?php echo $this->lang->line('sales_find_or_scan_item_or_receipt'); ?></label>
 				</li>
 				<li class="pull-left">
-					<?php echo form_input(array('name'=>'item', 'id'=>'item', 'class'=>'form-control input-sm', 'size'=>'50', 'tabindex'=>'1')); ?>
+					<?php echo form_input(array('name'=>'item', 'id'=>'item', 'class'=>'form-control input-sm', 'size'=>'50', 'tabindex'=>++$tabindex)); ?>
 					<span class="ui-helper-hidden-accessible" role="status"></span>
 				</li>
 				<li class="pull-right">
-					<button id='new_item_button' class='btn btn-info btn-sm pull-right modal-dlg' data-btn-submit='<?php echo $this->lang->line('common_submit') ?>' data-href='<?php echo site_url("items/view"); ?>'
+					<button id='new_item_button' class='btn btn-info btn-sm pull-right modal-dlg' data-btn-new='<?php echo $this->lang->line('common_new') ?>' data-btn-submit='<?php echo $this->lang->line('common_submit')?>' data-href='<?php echo site_url("items/view"); ?>'
 							title='<?php echo $this->lang->line($controller_name . '_new_item'); ?>'>
 						<span class="glyphicon glyphicon-tag">&nbsp</span><?php echo $this->lang->line($controller_name. '_new_item'); ?>
 					</button>
@@ -118,7 +120,6 @@ if (isset($success))
 			}
 			else
 			{				
-				$tabindex = 2;
 				foreach(array_reverse($cart, true) as $line=>$item)
 				{					
 			?>
@@ -135,7 +136,7 @@ if (isset($success))
 							if ($items_module_allowed)
 							{
 							?>
-								<td><?php echo form_input(array('name'=>'price', 'class'=>'form-control input-sm', 'value'=>to_currency_no_money($item['price'])));?></td>
+								<td><?php echo form_input(array('name'=>'price', 'class'=>'form-control input-sm', 'value'=>to_currency_no_money($item['price']), 'tabindex'=>++$tabindex));?></td>
 							<?php
 							}
 							else
@@ -158,12 +159,12 @@ if (isset($success))
 								}
 								else
 								{								
-									echo form_input(array('name'=>'quantity', 'class'=>'form-control input-sm', 'value'=>to_quantity_decimals($item['quantity']), 'tabindex'=>$tabindex));
+									echo form_input(array('name'=>'quantity', 'class'=>'form-control input-sm', 'value'=>to_quantity_decimals($item['quantity']), 'tabindex'=>++$tabindex));
 								}
 								?>
 							</td>
 
-							<td><?php echo form_input(array('name'=>'discount', 'class'=>'form-control input-sm', 'value'=>$item['discount']));?></td>
+							<td><?php echo form_input(array('name'=>'discount', 'class'=>'form-control input-sm', 'value'=>to_decimals($item['discount'], 0), 'tabindex'=>++$tabindex));?></td>
 							<td><?php echo to_currency($item['price']*$item['quantity']-$item['price']*$item['quantity']*$item['discount']/100); ?></td>
 							<td><a href="javascript:document.getElementById('<?php echo 'cart_'.$line ?>').submit();" title=<?php echo $this->lang->line('sales_update')?> ><span class="glyphicon glyphicon-refresh"></span></a></td>
 						</tr>
@@ -221,8 +222,7 @@ if (isset($success))
 							</td>
 						</tr>
 					<?php echo form_close(); ?>
-			<?php					
-					$tabindex++;					
+			<?php
 				}
 			}
 			?>
@@ -352,52 +352,51 @@ if (isset($success))
 			<div id="payment_details">
 					<?php
 					// Show Complete sale button instead of Add Payment if there is no amount due left
-					if( $payments_cover_total )
+					if($payments_cover_total)
 					{
 					?>
 						<?php echo form_open($controller_name."/add_payment", array('id'=>'add_payment_form', 'class'=>'form-horizontal')); ?>
-						<table class="sales_table_100">
-							<tr>
-								<td><?php echo $this->lang->line('sales_payment');?></td>
-								<td>
-									<?php echo form_dropdown('payment_type', $payment_options, array(), array('id'=>'payment_types', 'class'=>'selectpicker show-menu-arrow', 'data-style'=>'btn-default btn-sm', 'data-width'=>'auto', 'disabled'=>'disabled')); ?>
-								</td>
-							</tr>
-							<tr>
-								<td><span id="amount_tendered_label"><?php echo $this->lang->line('sales_amount_tendered'); ?></span></td>
-								<td>
-									<?php echo form_input(array('name'=>'amount_tendered', 'id'=>'amount_tendered', 'class'=>'form-control input-sm disabled', 'disabled'=>'disabled', 'value'=>to_currency_no_money($amount_due), 'size'=>'5', 'tabindex'=>$tabindex)); ?>
-								</td>
-							</tr>
-						</table>
+							<table class="sales_table_100">
+								<tr>
+									<td><?php echo $this->lang->line('sales_payment');?></td>
+									<td>
+										<?php echo form_dropdown('payment_type', $payment_options, array(), array('id'=>'payment_types', 'class'=>'selectpicker show-menu-arrow', 'data-style'=>'btn-default btn-sm', 'data-width'=>'auto', 'disabled'=>'disabled')); ?>
+									</td>
+								</tr>
+								<tr>
+									<td><span id="amount_tendered_label"><?php echo $this->lang->line('sales_amount_tendered'); ?></span></td>
+									<td>
+										<?php echo form_input(array('name'=>'amount_tendered', 'id'=>'amount_tendered', 'class'=>'form-control input-sm disabled', 'disabled'=>'disabled', 'value'=>'0', 'size'=>'5', 'tabindex'=>++$tabindex)); ?>
+									</td>
+								</tr>
+							</table>
 						<?php echo form_close(); ?>
 
-						<div class='btn btn-sm btn-success pull-right' id='finish_sale_button' tabindex='<?php echo $tabindex+1; ?>'><span class="glyphicon glyphicon-ok">&nbsp</span><?php echo $this->lang->line('sales_complete_sale'); ?></div>
+						<div class='btn btn-sm btn-success pull-right' id='finish_sale_button' tabindex='<?php echo ++$tabindex; ?>'><span class="glyphicon glyphicon-ok">&nbsp</span><?php echo $this->lang->line('sales_complete_sale'); ?></div>
 					<?php
 					}
 					else
 					{
 					?>
 						<?php echo form_open($controller_name."/add_payment", array('id'=>'add_payment_form', 'class'=>'form-horizontal')); ?>
-						<table class="sales_table_100">
-							<tr>
-								<td><?php echo $this->lang->line('sales_payment');?></td>
-								<td>
-									<?php echo form_dropdown('payment_type', $payment_options, array(), array('id'=>'payment_types', 'class'=>'selectpicker show-menu-arrow', 'data-style'=>'btn-default btn-sm', 'data-width'=>'auto')); ?>
-								</td>
-							</tr>
-							<tr>
-								<td><span id="amount_tendered_label"><?php echo $this->lang->line('sales_amount_tendered'); ?></span></td>
-								<td>
-									<?php echo form_input(array('name'=>'amount_tendered', 'id'=>'amount_tendered', 'class'=>'form-control input-sm', 'value'=>to_currency_no_money($amount_due), 'size'=>'5', 'tabindex'=>5)); ?>
-								</td>
-							</tr>
-						</table>
-
-						<div class='btn btn-sm btn-success pull-right' id='add_payment_button' tabindex='<?php echo $tabindex+2; ?>'><span class="glyphicon glyphicon-credit-card">&nbsp</span><?php echo $this->lang->line('sales_add_payment'); ?></div>
+							<table class="sales_table_100">
+								<tr>
+									<td><?php echo $this->lang->line('sales_payment');?></td>
+									<td>
+										<?php echo form_dropdown('payment_type', $payment_options, array(), array('id'=>'payment_types', 'class'=>'selectpicker show-menu-arrow', 'data-style'=>'btn-default btn-sm', 'data-width'=>'auto')); ?>
+									</td>
+								</tr>
+								<tr>
+									<td><span id="amount_tendered_label"><?php echo $this->lang->line('sales_amount_tendered'); ?></span></td>
+									<td>
+										<?php echo form_input(array('name'=>'amount_tendered', 'id'=>'amount_tendered', 'class'=>'form-control input-sm', 'value'=>to_currency_no_money($amount_due), 'size'=>'5', 'tabindex'=>++$tabindex)); ?>
+									</td>
+								</tr>
+							</table>
 						<?php echo form_close(); ?>
 
-						<?php
+						<div class='btn btn-sm btn-success pull-right' id='add_payment_button' tabindex='<?php echo ++$tabindex; ?>'><span class="glyphicon glyphicon-credit-card">&nbsp</span><?php echo $this->lang->line('sales_add_payment'); ?></div>
+					<?php
 					}
 					?>
 
@@ -443,8 +442,8 @@ if (isset($success))
 				</div>
 				
 				<?php
-				// Only show this part if there is at least one payment entered.
-				if (count($payments) > 0)
+				// Only show this part if the payment cover the total
+				if($payments_cover_total)
 				{
 				?>
 					<div class="container-fluid">
@@ -516,7 +515,7 @@ if (isset($success))
 	</div>
 </div>
 
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
 $(document).ready(function()
 {
     $("#item").autocomplete(
@@ -648,7 +647,7 @@ $(document).ready(function()
 	{
 		if (event.which == 13)
 		{
-			$('#cart_' + (1 + $(this).index() / 2 )).submit();
+			$(this).parents("tr").prevAll("form:first").submit();
 		}
 	});
 
@@ -701,12 +700,12 @@ function check_payment_type_giftcard()
 	if ($("#payment_types").val() == "<?php echo $this->lang->line('sales_giftcard'); ?>")
 	{
 		$("#amount_tendered_label").html("<?php echo $this->lang->line('sales_giftcard_number'); ?>");
-		$("#amount_tendered").val('').focus();
+		$("#amount_tendered:enabled").val('').focus();
 	}
 	else
 	{
 		$("#amount_tendered_label").html("<?php echo $this->lang->line('sales_amount_tendered'); ?>");
-		$("#amount_tendered").val('<?php echo to_currency_no_money($amount_due); ?>');
+		$("#amount_tendered:enabled").val('<?php echo to_currency_no_money($amount_due); ?>');
 	}
 }
 

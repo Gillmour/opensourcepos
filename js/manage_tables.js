@@ -60,7 +60,9 @@
 					dialog_ref.close();
 				}
 			});
-			return { buttons: buttons, cssClass: dialog_class};
+			return { buttons: buttons.sort(function(a, b) {
+				return ($(b).text()) < ($(a).text()) ? -1 : 1;
+			}), cssClass: dialog_class};
 		};
 
 		$(selector).each(function(index, $element) {
@@ -109,7 +111,7 @@
 
 	var selected_ids = function () {
 		return $.map(table().getSelections(), function (element) {
-			return element[options.uniqueId || 'id'];
+			return element[options.uniqueId || 'id'] !== '-' ? element[options.uniqueId || 'id'] : null;
 		});
 	};
 
@@ -161,7 +163,7 @@
 					});
 					$.notify(response.message, { type: 'success' });
 				} else {
-					$.notify(response.message, { type: 'pastel-danger' });
+					$.notify(response.message, { type: 'danger' });
 				}
 			}, "json");
 		} else {
@@ -248,7 +250,7 @@
 			var id = response.id;
 
 			if (!response.success) {
-				$.notify(response.text, { type: 'danger' });
+				$.notify(response.message, { type: 'danger' });
 			} else {
 				var message = response.message;
 				var selector = rows_selector(response.id);

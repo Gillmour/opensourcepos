@@ -19,7 +19,7 @@
 		<div class="form-group form-group-sm">
 			<?php echo form_label($this->lang->line('receivings_supplier'), 'supplier', array('class'=>'control-label col-xs-3')); ?>
 			<div class='col-xs-8'>
-				<?php echo form_input(array('name' => 'supplier_id', 'value' => $selected_supplier_name, 'id' => 'supplier_id', 'class'=>'form-control input-sm'));?>
+				<?php echo form_input(array('name' => 'supplier_name', 'value' => $selected_supplier_name, 'id' => 'supplier_name', 'class'=>'form-control input-sm'));?>
 				<?php echo form_hidden('supplier_id', $selected_supplier_id);?>
 			</div>
 		</div>
@@ -47,7 +47,7 @@
 	</fieldset>
 <?php echo form_close(); ?>
 		
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
 $(document).ready(function()
 {
 	<?php $this->load->view('partial/datepicker_locale'); ?>
@@ -87,7 +87,7 @@ $(document).ready(function()
 		$("input[name='supplier_name']").val(ui.item.label);
 	};
 
-	var autocompleter = $("#supplier_id").autocomplete(
+	var autocompleter = $("#supplier_name").autocomplete(
 	{
 		source: '<?php echo site_url("suppliers/suggest"); ?>',
 		minChars: 0,
@@ -123,14 +123,6 @@ $(document).ready(function()
 		submitHandler : function(form)
 		{
 			submit_form.call(form);
-		},
-		rules:
-		{
-
-		},
-		messages: 
-		{
-
 		}
 	}, form_support.error));
 

@@ -19,6 +19,11 @@ class Summary_payments extends Report
 		$this->db->join('sales', 'sales.sale_id=sales_payments.sale_id');
 		$this->db->where("date(sale_time) BETWEEN " . $this->db->escape($inputs['start_date']) . " AND " . $this->db->escape($inputs['end_date']));
 
+		if ($inputs['location_id'] != 'all')
+		{
+			$this->db->where('item_location', $inputs['location_id']);
+		}
+
 		if ($inputs['sale_type'] == 'sales')
         {
 			$this->db->where('payment_amount > 0');
@@ -59,8 +64,12 @@ class Summary_payments extends Report
 	{
 		$this->db->select('SUM(subtotal) AS subtotal, SUM(total) AS total, SUM(tax) AS tax, SUM(cost) AS cost, SUM(profit) AS profit');
 		$this->db->from('sales_items_temp');
-		$this->db->join('items', 'sales_items_temp.item_id = items.item_id');
 		$this->db->where("sale_date BETWEEN " . $this->db->escape($inputs['start_date']) . " AND " . $this->db->escape($inputs['end_date']));
+
+		if ($inputs['location_id'] != 'all')
+		{
+			$this->db->where('item_location', $inputs['location_id']);
+		}
 
 		if ($inputs['sale_type'] == 'sales')
         {
